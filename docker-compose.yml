@@ -1,0 +1,25 @@
+#--------------------------------------------------------------
+# HelixCore docker-compose
+#--------------------------------------------------------------
+version: '3'
+
+#---NETWORKS---------------------------------------------------
+networks:
+  default:
+    external:
+      name: common
+
+#---SERVICES---------------------------------------------------
+services:
+  hansoft:
+    build:
+      context: ./hansoft
+      dockerfile: Dockerfile
+    ports:
+      - '50256:50256'
+    cap_add:
+      - SYS_ADMIN
+    security_opt:
+      - seccomp:unconfined
+    privileged: true
+    tty: true
