@@ -11,10 +11,11 @@ RUN echo 'export LANG=ja_JP.UTF-8' >> ~/.bashrc ;\
     echo 'export LANGUAGE="ja_JP:ja"' >> ~/.bashrc
 
 RUN wget -P /opt 'https://cache.hansoft.com/Hansoft+Server+11.0030+Linux2.6+x64.zip' \
-    && unzip /opt/Hansoft+Server+11.0030+Linux2.6+x64.zip
-RUN mkdir -p /opt/HPMWeb \
-    && wget -P /opt/HPMWeb 'https://cache.hansoft.com/HPMWeb-Linux-x64-11.0016.zip' \
-    && unzip /opt/HPMWeb/HPMWeb-Linux-x64-11.0016.zip
+    && unzip /opt/Hansoft+Server+11.0030+Linux2.6+x64.zip -d /opt/
+
+RUN mkdir -p /opt/hpmweb \
+    && wget -P /opt/hpmweb 'https://cache.hansoft.com/HPMWeb-Linux-x64-11.0016.zip' \
+    && unzip /opt/hpmweb/HPMWeb-Linux-x64-11.0016.zip -d /opt/hpmweb
 
 RUN sudo update-alternatives --set editor /usr/bin/vim.basic \
     && useradd -m $USER \
