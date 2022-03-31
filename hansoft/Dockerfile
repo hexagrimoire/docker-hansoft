@@ -10,14 +10,24 @@ RUN apt-get update && apt-get -y install wget gnupg less language-pack-ja-base l
 RUN echo 'export LANG=ja_JP.UTF-8' >> ~/.bashrc ;\
     echo 'export LANGUAGE="ja_JP:ja"' >> ~/.bashrc
 
-RUN wget -P /opt 'https://cache.hansoft.com/Hansoft+Server+11.0030+Linux2.6+x64.zip' \
-    && unzip /opt/Hansoft+Server+11.0030+Linux2.6+x64.zip -d /opt/
-
-RUN mkdir -p /opt/hpmweb \
-    && wget -P /opt/hpmweb 'https://cache.hansoft.com/HPMWeb-Linux-x64-11.0016.zip' \
-    && unzip /opt/hpmweb/HPMWeb-Linux-x64-11.0016.zip -d /opt/hpmweb
-
 RUN sudo update-alternatives --set editor /usr/bin/vim.basic \
     && useradd -m $USER \
     && echo "$USER:$PASSWD" | chpasswd \
     && echo "$USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+RUN wget -P /opt 'https://cache.hansoft.com/Hansoft+Server+11.0030+Linux2.6+x64.zip' \
+    && unzip /opt/Hansoft+Server+11.0030+Linux2.6+x64.zip -d /opt/ \
+    && mkdir -p /opt/HansoftServer/Databases \
+    && wget -P /opt/HansoftServer/Databases https://github.com/Hansoft/hansoft-example-database/archive/refs/heads/master.zip \
+    && unzip /opt/HansoftServer/Databases/master.zip -d /opt/HansoftServer/Databases/ \
+    && cp -r /opt/HansoftServer/Databases/hansoft-example-database-master/example /opt/HansoftServer/Databases/example \
+    && rm -Rf /opt/HansoftServer/Databases/hansoft-example-database-master \
+    && rm -Rf /opt/HansoftServer/Databases/master.zip \
+    && chown -R hansoft:hansoft /opt/HansoftServer
+
+RUN mkdir -p /opt/hpmweb \
+    && wget -P /opt/hpmweb 'https://cache.hansoft.com/HPMWeb-Linux-x64-11.0016.zip' \
+    && unzip /opt/hpmweb/HPMWeb-Linux-x64-11.0016.zip -d /opt/hpmweb \
+    && chown -R hansoft:hansoft /opt/hpmweb \
+    && rm -Rf /opt/hpmweb/HPMWeb-Linux-x64-11.0016.zip
+
